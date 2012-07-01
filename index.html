@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Screens</title>
+        <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+        <meta charset="utf-8" />
+        <script src="http://debug.phonegap.com/target/target-script-min.js#stopitcarl"></script>
+        <script type="text/javascript" charset="utf-8" src="js/config.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/libs/cordova-1.8.0.js"></script>       
+        <script type="text/javascript" charset="utf-8" src="js/libs/ChildBrowser.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/utils/Utils.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/libs/json2.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/libs/iscroll.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/libs/oauth.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/libs/sha1.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/facebook/facebookUtils.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/facebook/FBConnect.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/twitter/twitterUtils.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/twitter/Twitter.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/dataManipulator.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/template.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/screen.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/api/user.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/helpers.js"></script>
+        <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+        <link type="text/css" rel="stylesheet" href="css/css.css" />
+    </head>
+    <body onload="onBodyLoad()">
+        
+        <div class="heading_bar" id="heading_bar">
+            <a class="button header_left_button" id="header_left_button" onclick="ScreenObject.showScreenById('home')"></a>
+            <h1 class="header_title" id="header_title">Welcome to MobileToast :)</h1>
+            <a class="button header_right_button" id="header_right_button"></a>
+        </div><!-- end of heading_bar -->
+        
+        <div class="heading_bar" id="textarea_heading_bar">
+            <a class="button header_left_button" id="textarea_header_left_button" onclick="hideTextareaForPosting()"></a>
+            <h1 class="header_title textarea_header_title" id="textarea_header_title">Update Status</h1>
+        </div><!-- end of textarea_heading_bar -->
+        
+        
+        <!-- -------------TEXT AREA POSTING----------- -->
+        <div class="textarea_for_posting_wrapper" id="textarea_for_posting_wrapper">
+            <div class="textarea_tabs_wrapper">
+                <div class="textarea_tabs_div">
+                    <a id="textarea_screen_both_tab" onclick="setTextareaTabs('both')">All</a>
+                    <a id="textarea_screen_twitter_tab" onclick="setTextareaTabs('twitter')">Twitter</a>
+                    <a id="textarea_screen_facebook_tab" onclick="setTextareaTabs('facebook')">Facebook</a>
+                </div>
+            </div>
+            <textarea id="textarea_for_posting"></textarea>
+            <span id=""></span>
+            <a class="link_under_textarea" id="postButton" onclick="submitButtonClicked()"><img src="img/post.png"/></a>
+            <a class="link_under_textarea" id="cameraButton" onclick="submitButtonClicked()"><img src="img/camera.png"/></a>
+
+        </div><!-- end of textarea_for_posting -->
+     
+        <!-- -------------LOGIN SCREEN----------- -->
+        <div class="one_screen" id="login">
+            <div class="login_wrapper_div" id="login_wrapper_div">
+                <form id="login_form" onsubmit="return false;">
+                    <p class="signin_logo" />
+                    <p>&nbsp;</p>
+                    <input type="email" name="email" id="signin_input_email" value="" placeholder="Email" onblur="ScreenObject.resetViewPort()"/>
+                    <input type="password" name="password" id="signin_input_password" value="" placeholder="Password" onblur="ScreenObject.resetViewPort()"/>
+                    <button onclick="UserObject.signIn()" id="signin_button">Sign In</button>
+                </form>
+                <p><a onclick="ScreenObject.fromSignInToSignUp()">Sign Up</a> to create a FlipToast account</p>
+                <p>
+                    Or login with<br />
+                    <button onclick="UserObject.signIn('facebook')" class="facebook_link" id="facebook_link_btn"><img src="img/fb_icon.png" alt="" class="login_btn_img" />Facebook</button>
+                    <button onclick="UserObject.signIn('twitter')" class="twitter_link" id="twitter_link_btn"><img src="img/twitter_icon.png" alt="" class="login_btn_img" />Twitter</button>
+                </p>
+            </div>
+            <div class="login_wrapper_div signup_wrapper_div" id="signup_wrapper_div">
+                <form id="sign_up_form" onsubmit="return false;">
+                    <p id="title">Create a new Fliptoast account</p>
+                    <input type="email" name="email" id="signup_input_email" value="" placeholder="Email Address" onblur="UserObject.attemptToShowSignUpButtons(); ScreenObject.resetViewPort()" />
+                    <input type="password" name="password" id="signup_input_password" value="" placeholder="Password" onblur="UserObject.attemptToShowSignUpButtons(); ScreenObject.resetViewPort()"/>
+                    <div id="add_social_media_buttons">
+                        <p>Add Social Media accounts</p>
+                        <div class="add_social_media_account_div" id="add_facebook_account_div"></div>
+                        <div class="add_social_media_account_div" id="add_twitter_account_div"></div>
+                        <p></p>
+                        <button onclick="UserObject.signUp()" id="signup_button">Create Account &amp; Sign In</button>
+                        <button onclick="ScreenObject.fromSignUpToSignIn()" id="cancel_button">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        
+        <!-- -------------DASHBOARD SCREEN ----------- -->
+        <div class="one_screen" id="home">
+            <div class="all_dashboard_rows_wrapper" id="all_dashboard_rows_wrapper">
+                <div class="all_dashboard_rows">
+                    <div class="pull_down_of_vertical_scroll" id="the_home_screen_pull_down">
+                        Pull down to refresh all ...
+                    </div>
+                    <ul class="all_dashboard_rows_list" id="all_dashboard_rows_list">
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_total_div" onclick="ScreenObject.showScreenById('photosvideo_screen'); switchBetweenTwitterOrFacebookData('both')">
+                                Photos &amp; Videos <span id="newsfeed_photos_and_videos_total">0</span>
+                            </div>
+                            <div class="dashboard_row_wrapper" id="the_dashboard_newsfeed_photos_and_videos_row">
+                                <div class="dashboard_row newsfeed_photos_and_videos" id="dashboard_row_newsfeed_photos_and_videos_div">
+                                    <ul id="dashboard_newsfeed_photos_and_videos_list">
+                                        <li class="item_with_loading">Getting your photos &amp; videos.<br /><span class="loading_bar"></span></li>
+                                    </ul>
+                                </div>
+                            </div><!-- the_dashboard_photos_and_videos_row -->
+                        </li>                       
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_total_div" onclick="ScreenObject.showScreenById('newsfeed_screen'); switchBetweenTwitterOrFacebookData('both')">
+                                News Feed <span id="newsfeed_total">0</span>
+                            </div>
+                            <div class="dashboard_row_wrapper" id="the_dashboard_newsfeed_row">
+                                <div class="dashboard_row newsfeed" id="dashboard_row_newsfeed_div">
+                                    <ul id="dashboard_newsfeed_list">
+                                        <li class="item_with_loading">Getting your news feed.<br /><span class="loading_bar"></span></li>
+                                    </ul>
+                                </div>
+                            </div><!-- the_dashboard_newsfeed_row -->
+                        </li>
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_total_div" onclick="ScreenObject.showScreenById('notifications_screen'); switchBetweenTwitterOrFacebookData('both')">
+                                Notifications <span id="notifications_total">0</span>
+                            </div>
+                            <div class="dashboard_row_wrapper" id="the_dashboard_notifications_row">
+                                <div class="dashboard_row notifications" id="dashboard_row_notifications_div">
+                                    <ul id="dashboard_notifications_list">
+                                        <li class="item_with_loading">Getting your notifications.<br /><span class="loading_bar"></span></li>
+                                    </ul>
+                                </div>
+                            </div><!-- the_dashboard_notifications_row -->
+                        </li>
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_total_div" onclick="ScreenObject.showScreenById('messages_screen'); switchBetweenTwitterOrFacebookData('both')">
+                                Messages <span id="messages_total">0</span>
+                            </div>
+                            <div class="dashboard_row_wrapper" id="the_dashboard_messages_row">
+                                <div class="dashboard_row messages" id="dashboard_row_messages_div">
+                                    <ul id="dashboard_messages_list">
+                                        <li class="item_with_loading">Getting your messages.<br /><span class="loading_bar"></span></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end the_dashboard_messages_row -->
+                        </li>
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_total_div" onclick="ScreenObject.showScreenById('birthdays_screen');switchBetweenTwitterOrFacebookData('both')">
+                                Birthdays <span id="birthdays_total">0</span>
+                            </div>
+                            <div class="dashboard_row_wrapper" id="the_dashboard_birthdays_row">
+                                <div class="dashboard_row birthdays" id="dashboard_row_birthdays_div">
+                                    <ul id="dashboard_birthdays_list">
+                                        <li class="item_with_loading">Getting your birthdays.<br /><span class="loading_bar"></span></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end the_dashboard_messages_row -->
+                        </li> 
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_total_div" onclick="ScreenObject.showScreenById('events_screen');switchBetweenTwitterOrFacebookData('both')">
+                                Events <span id="events_total">0</span>
+                            </div>
+                            <div class="dashboard_row_wrapper" id="the_dashboard_events_row">
+                                <div class="dashboard_row events" id="dashboard_row_events_div">
+                                    <ul id="dashboard_events_list">
+                                        <li class="item_with_loading">Getting your events.<br /><span class="loading_bar"></span></li>
+                                    </ul>
+                                </div>
+                            </div><!-- end the_dashboard_events_row -->
+                        </li>
+                        <li class="one_dashboard_row_list_item">
+                            <div class="dashboard_row_wrapper">
+                                <div class="dashboard_row bottom_part_of_lists">
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_home_screen_pull_up">
+                        Pull up to refresh all ...
+                    </div>
+                </div><!-- end all_dashboard_rows -->
+            </div><!-- end all_dashboard_rows_wrapper -->
+            
+        </div>
+        
+            
+        <!-- -------------FRIENDS SCREEN----------- -->
+        <div class="one_screen" id="friends_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="friends_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="friends_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="friends_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_friends_wrapper_div">
+                <div class="big_list_scroller">
+                    <ul id="friends_list">
+                        <!-- Placeholder for later -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- -------------MESSAGES SCREEN----------- -->
+        <div class="one_screen" id="messages_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="messages_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="messages_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="messages_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_messages_screen_wrapper_div">
+                <div class="big_list_scroller">
+                    <div class="pull_down_of_vertical_scroll" id="the_messages_screen_pull_down">
+                        Pull down to refresh messages ...
+                    </div>
+                    <ul id="messages_list">
+                        <!-- Placeholder for later -->
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_messages_screen_pull_up">
+                        Pull up to refresh messages ...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- -------------NOTIFICATION SCREEN----------- -->
+        <div class="one_screen" id="notifications_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="notifications_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="notifications_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="notifications_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_notifications_screen_wrapper_div">
+                <div class="big_list_scroller">
+                    <div class="pull_down_of_vertical_scroll" id="the_notifications_screen_pull_down">
+                        Pull down to refresh notifications ...
+                    </div>
+                    <ul id="notifications_list">
+                        <!-- Placeholder for later -->
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_notifications_screen_pull_up">
+                        Pull up to refresh notifications ...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- -------------NEWSFEED SCREEN----------- -->
+        <div class="one_screen" id="newsfeed_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="newsfeed_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="newsfeed_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="newsfeed_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_newsfeed_screen_wrapper_div">
+                <div class="big_list_scroller">
+                    <div class="pull_down_of_vertical_scroll" id="the_newsfeed_screen_pull_down">
+                        Pull down to refresh newsfeed ...
+                    </div>
+                    <ul id="newsfeed_list">
+                        <!-- Placeholder for later -->
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_newsfeed_screen_pull_up">
+                        Pull up to refresh newsfeed ...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- -------------PHOTOSVIDEO SCREEN----------- -->
+        <div class="one_screen" id="photosvideo_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="photosvideo_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="photosvideo_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="photosvideo_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_photosvideo_screen_wrapper_div">
+                <div class="big_list_scroller">
+                    <div class="pull_down_of_vertical_scroll" id="the_photosvideo_screen_pull_down">
+                        Pull down to refresh photos and videos ...
+                    </div>
+                    <ul id="photosvideo_list">
+                        <!-- Placeholder for later -->
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_photosvideo_screen_pull_up">
+                        Pull up to refresh photos and videos ...
+                    </div>
+                </div>
+            </div>
+        </div>    
+        
+        <!-- -------------BIRTHDAYS SCREEN----------- -->
+        <div class="one_screen" id="birthdays_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="birthdays_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="birthdays_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="birthdays_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_birthdays_screen_wrapper_div">
+                <div class="big_list_scroller">
+                    <div class="pull_down_of_vertical_scroll" id="the_birthdays_screen_pull_down">
+                        Pull down to refresh birthdays ...
+                    </div>
+                    <ul id="birthdays_list">
+                        <!-- Placeholder for later -->
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_birthdays_screen_pull_up">
+                        Pull up to refresh birthdays ...
+                    </div>
+                </div>
+            </div>
+        </div>       
+        
+        <!-- -------------EVENTS SCREEN----------- -->
+        <div class="one_screen" id="events_screen">
+            <div class="big_list_tabs_wrapper">
+                <div class="big_list_tabs_div">
+                    <a class="left_link" id="events_screen_both_tab" onclick="switchBetweenTwitterOrFacebookData('both')">All</a>
+                    <a class="mid_link" id="events_screen_twitter_tab" onclick="switchBetweenTwitterOrFacebookData('twitter')">Twitter</a>
+                    <a class="right_link" id="events_screen_facebook_tab" onclick="switchBetweenTwitterOrFacebookData('facebook')">Facebook</a>
+                </div>
+            </div>
+            <div class="big_list_wrapper" id="the_events_screen_wrapper_div">
+                <div class="big_list_scroller">
+                    <div class="pull_down_of_vertical_scroll" id="the_events_screen_pull_down">
+                        Pull down to refresh events ...
+                    </div>
+                    <ul id="events_list">
+                        
+                    </ul>
+                    <div class="pull_up_of_vertical_scroll" id="the_events_screen_pull_up">
+                        Pull up to refresh events ...
+                    </div>
+                </div>
+            </div>
+        </div>          
+        
+        
+        <!-- -------------TWITTER SCREEN----------- -->
+        <div class="one_screen" id="twitter">
+            <button class="standard_button" onclick="twitterRequest('tweets')" id="get_tweets_button">Tweets</button>
+            <button class="standard_button" onclick="twitterRequest('direct_messages')" id="get_tweets_button">Direct Messages</button>
+            <button class="standard_button" onclick="twitterRequest('favorite')" id="get_tweets_button">Favorite</button>
+            <button class="standard_button" onclick="showTextareaForPosting('tweet')" id="post_new_tweet_button">Tweet</button>
+            <div class="twitter_items_wrapper" id="the_twitter_items_wrapper_div">
+                <div class="twitter_items_scroller">
+                    <ul id="twitter_items_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        
+        <!-- -------------UPLOAD PHOTO SCREEN----------- -->
+        <div class="one_screen" id="upload_photo_to_facebook">
+            <div class="file_system_list_wrapper" id="upload_photo_to_facebook_start">
+                <img src="img/blank_130x98.gif" class="upload_to_facebook_photo_preview" id="upload_to_facebook_photo_preview" width="320px" height="120px" />
+                <button class="standard_button" onclick="choosePhotoFromAlbums(pictureSource.PHOTOLIBRARY)">Choose from album.</button>
+                <button class="standard_button" onclick="takePictureWithCamera()">Tak e a picture with camera.</button>
+            </div>
+            <br />
+            <button class="standard_button" onclick="attempToUploadFileToFacebook('');">Upload to facebook.</button>
+            <button class="standard_button" onclick="attempToUploadFileToTwitter('');">Upload to twitter.</button>
+            <button class="standard_button" onclick="cancelUploadPhotoToFacebook()">Cancel upload to facebook.</button>
+        </div>
+        
+        <!-- -------------NO INTERNET SCREEN----------- -->
+        <div class="one_screen" id="no_internet">
+            <h1 id="title_of_no_internet">Hey, it's the no internet screen!</h1>
+        </div>
+
+        <!-- -------------BIRTHDAYS VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen birthdaysViewer" id="birthdaysViewer">
+            <a class="button header_left_button" id="birthdaysLeftButton" onclick="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper birthdays_wrapper" id="birthdaysViewer_iscroll">
+                <div class="one_item_viewer_content birthdays_content" id="birthdays_content">
+                    <ul class="birthdaysViewer_list" id="birthdaysViewer_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- -------------EVENTS VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen eventsViewer" id="eventsViewer">
+            <a class="button header_left_button" id="eventsLeftButton" onclick="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper events_wrapper" id="eventsViewer_iscroll">
+                <div class="one_item_viewer_content events_content" id="events_content">
+                    <div class="one_item_viewer_pull_down" id="the_eventsViewer_pull_down">
+                        Pull down to refresh...
+                    </div>
+                    <ul class="eventsViewer_list" id="eventsViewer_list">
+                    </ul>
+                    <div class="one_item_viewer_pull_up" id="the_eventsViewer_pull_up">
+                        Pull up to fetch more items...
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- -------------MESSAGES VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen messagesViewer" id="messagesViewer">
+            <a class="button header_left_button" id="messagesLeftButton" onclick="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper messages_wrapper" id="messagesViewer_iscroll">
+                <div class="one_item_viewer_content messages_content" id="messages_content">
+                    <div class="one_item_viewer_pull_down" id="the_newsfeedViewer_pull_down">
+                        Pull down to refresh...
+                    </div>
+                    <ul class="one_item_viewer_list messagesViewer_list" id="messagesViewer_list">
+                    </ul>
+                    <div class="one_item_viewer_pull_up" id="the_newsfeedViewer_pull_up">
+                        Pull up to fetch more items...
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- -------------NEWSFEED VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen newsfeedViewer" id="newsfeedViewer">
+            <a class="button header_left_button" id="newsfeedLeftButton" onclick="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper newsfeed_wrapper" id="newsfeedViewer_iscroll">
+                <div class="one_item_viewer_content newsfeed_content" id="newsfeed_content">
+                    <div class="one_item_viewer_pull_down" id="the_newsfeedViewer_pull_down">
+                        Pull down to refresh...
+                    </div>
+                    <ul class="newsfeedViewer_list" id="newsfeedViewer_list">
+                    </ul>
+                    <div class="one_item_viewer_pull_up" id="the_newsfeedViewer_pull_up">
+                        Pull up to fetch more items...
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- -------------NOTIFICATIONS VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen notificationsViewer" id="notificationsViewer">
+            <a class="button header_left_button" id="notificationsLeftButton" onclick="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper notifications_wrapper" id="notificationsViewer_iscroll">
+                <div class="one_item_viewer_content notifications_content" id="notifications_content">
+                    <ul class="notificationsViewer_list" id="notificationsViewer_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- -------------FRIENDS VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen friendsViewer" id="friendsViewer">
+            <a class="button header_left_button" id="friendsLeftButton" ontouchstart="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper friends_wrapper" id="friendsViewer_iscroll">
+                <div class="one_item_viewer_content notifications_content" id="friends_content">
+                    <ul class="friendsViewer_list" id="friendsViewer_list">
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- -------------PHOTO VIDEO VIEWER SCREEN----------- -->
+        <div class="one_screen one_viewer_screen photoVideoViewer" id="photoVideoViewer">
+            <a class="button header_left_button" id="photoVideoLeftButton" onclick="ScreenObject.showScreenById('home')"></a>
+            <div class="one_item_viewer_wrapper photovideo_wrapper" id="photoVideoViewer_iscroll">
+                <div class="one_item_viewer_content photo_video_content" id="photo_video_content">
+                    <div class="photo_list_scroller">
+                        <div class="one_item_viewer_pull_down" id="the_newsfeedViewer_pull_down">
+                            Pull down to refresh...
+                        </div>
+                        <ul class="one_item_viewer_list photoVideoViewer_list" id="photoVideoViewer_list">
+                        </ul>
+                        <div class="one_item_viewer_pull_up" id="the_newsfeedViewer_pull_up">
+                            Pull up to fetch more items...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        
+        <!-- -------------FOOTER BAR ---------- -->
+        <div class="footer_bar" id="footer_bar" style="display:none">
+            <a class="footer_left_button"></a>
+            <a class="footer_center_button" onclick="ScreenObject.showExpandedMenu()"></a>
+            <a class="footer_right_button" onclick="showTextareaForPosting('update_status')"></a>
+            <a onclick="ScreenObject.showSecondExpandedMenu()" class="footer_debug_link">DEBUG</a>
+        </div>
+        
+        <!-- start the expanded menu -->
+        <div class="expanded_menu" id="expanded_menu" style="display:none">
+            <!--<div id="search" class="right" onclick="ScreenObject.showScreenById('search')">Search</div>-->
+            <div class="clr"></div>
+            <div id="profileSettings" class="navsection" onclick="ScreenObject.showScreenById('profileSetting')">
+                <span class="focus_link">Profile &amp; Settings</span>
+            </div>
+            <div id="navnewsfeed" class="navsection" onclick="ScreenObject.showScreenById('newsfeed_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <span class="focus_link">News Feed</span>
+            </div>
+            <div class="clr"></div>   
+            <div id="navmessages" class="navsection" onclick="ScreenObject.showScreenById('messages_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <span class="focus_link">Messages</span>
+            </div>
+            <div class="clr"></div>       
+            <div id="navnotifications" class="navsection" onclick="ScreenObject.showScreenById('notifications_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <img class="focus_image" id="navnotificationsimage" src="" alt="" />
+                <span class="focus_link">Notifications</span>
+                <span class="focus_count" id="navnotificationstotal"></span>
+            </div>
+            <div class="clr"></div>       
+            <div id="navphotosvideo" class="navsection" onclick="ScreenObject.showScreenById('photosvideo_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <span class="focus_link">Photos &amp; Video</span>
+            </div>
+            <div class="clr"></div> 
+            <div id="navbirthdays" class="navsection" onclick="ScreenObject.showScreenById('birthdays_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <span class="focus_link">Birthdays</span>
+            </div>
+            <div class="clr"></div> 
+            <div id="navevents" class="navsection" onclick="ScreenObject.showScreenById('events_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <span class="focus_link">Events</span>
+            </div>
+            <div class="clr"></div> 
+            <div id="navfriends" class="navsection" onclick="ScreenObject.showScreenById('friends_screen'); switchBetweenTwitterOrFacebookData('both')">
+                <span id="link_for_blue">Friends</span>
+            </div>
+        </div>
+        <!-- end of expanded menu -->
+        
+        <!-- start the second - debug - expanded menu -->
+        <div class="expanded_menu" id="second_expanded_menu">
+            <!--button id="link_for_green" onclick="ScreenObject.showScreenById('twitter')">Twitter</button-->
+            <button onclick="ScreenObject.showScreenById('friends_screen')">Friends</button>
+            <button onclick="showAllDashboardiScrolls()">Show iScrolls</button>
+            <div class="clr"></div>
+            <button id="link_for_green" onclick="ScreenObject.showScreenById('upload_photo_to_facebook')">Upload Photo</button>
+            <div class="clr"></div>
+            <button onclick="showRegisteredUsers()" class="focus_link">Show Users</button>
+            <div class="clr"></div>
+            <button onclick="clearRegisteredUsers()" class="focus_link">Clear Users</button>
+            <div class="clr"></div>
+            <button onclick="showLoggedUser()" class="focus_link">The logged user</button>
+            <div class="clr"></div>
+            <button onclick="reConnectToFacebook()">Re-connect to facebook</button>
+            <button onclick="alert( JSON.stringify( last_items_parameters ) )">Show the last items parameters</button>
+            <button onclick="alertFriends()">Show the cached friends</button>
+        </div>
+        <!-- end of second - debug - expanded menu -->
+        
+        
+        <div class="wrapper_of_item_with_loading" id="whole_screen_loading_overlay">
+            <div class="item_with_loading whole_screen_item_with_loading">Uploading your photo.
+                <br /><br />
+                <span class="loading_bar"></span>
+            </div>
+        </div>
+        
+    </body>
+</html>

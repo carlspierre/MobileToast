@@ -1,0 +1,41 @@
+<div id='eventsViewer_EVENTID' data-network="facebook" class="event_item single_event_view">
+    <img class="item_viewer_image" src="EVENT_IMAGE" alt="" />
+    <div class='texts_wrapper'>
+        <div>NAME</div>
+        <div>OWNER</div>
+        <!-- the whole line above is a variable, because the event might not have a owner. (PS) -->
+        <div>Starts at: 
+        	<span class="start_time">START_TIME</span> till 
+        	<span class="end_time">END_TIME</span></div>
+        <div>RSVP:
+
+		<span id="rsvp_not_replied" style="display: inline;">
+			<a onclick="facebookObject.graphApiAction(EVENTID, 'attending', 'post');" onclick="setEventRSVP('attending', EVENTID);" href="#">Join</a>
+			<a onclick="facebookObject.graphApiAction(EVENTID, 'maybe', 'post');" href="#">Maybe</a>
+			<a onclick="facebookObject.graphApiAction(EVENTID, 'declined', 'post');" href="#">Decline</a>
+		</span>
+
+		<span id="rsvp_attending" style="display: inline;">
+			<strong>Going</strong>
+			<a href="#" onclick="facebookObject.graphApiAction(EVENTID, 'maybe', 'post');">Maybe</a>
+			<a href="#" onclick="facebookObject.graphApiAction(EVENTID, 'declined', 'post');">Decline</a>
+		</span>
+
+		<span id="rsvp_unsure" style="display: inline;">
+			<a href="#" onclick="facebookObject.graphApiAction(EVENTID, 'attending', 'post');">Join</a>
+			<strong>Maybe</strong>
+			<a href="#" onclick="facebookObject.graphApiAction(EVENTID, 'declined', 'post');">Decline</a>
+		</span>
+
+		<span id="rsvp_declined" style="display: inline;">
+			<a href="#" onclick="facebookObject.graphApiAction(EVENTID, 'attending', 'post');">Join</a>
+			<a href="#" onclick="facebookObject.graphApiAction(EVENTID, 'maybe', 'post');">Maybe</a>
+			<strong>Not going</strong>
+		</span>
+        </div>
+        <div>DESCRIPTION</div>
+    </div>
+    <div id="event_feed" class="item_feed_wall">
+    	<div class="fetching"><img style="float: left; padding-right: 10px;" src="img/spinner.small.gif" alt="" /> Fetching feed</div>
+    </div>
+</div>

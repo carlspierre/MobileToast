@@ -1,0 +1,19 @@
+<li ID='NEWSID' class='CLASSTYPE' style="background-image:url(PICTURE)">
+    <span class="gen_user_info" onclick="ScreenObject.showScreenById('newsfeedViewer', 'NEWSID')">
+        <img class="avatar_image" src="USERIMAGE" alt="" />
+        <span class="author">FROMUSERNAME</span>
+        <div class="detail_tw_social_icon"></div>
+        <span class="date">CREATEDAT</span><br />
+        <div class="text_of_tweet_TWEETID" id="text_of_tweet_NEWSID">TEXT</div>
+    </span>  
+    <div class="clr"></div>
+    <span class="social_links">
+        <a onclick="showTextareaForPosting('twitter_reply', 'NEWSID', 'SCREENNAME')" 
+        id="reply_link_for_NEWSID"><img id="reply_image_for_NEWSID" src="img/reply-off.png"/></a>
+        <a onclick="twitterObject.restApiAction('NEWSID', 'retweet', 'POST'); return false;" id="retweet_link_for_NEWSID"><img id="retweet_image_for_NEWSID" src="img/retweet-off.png" /></a>
+        <!--<a onclick="twitterObject.restApiAction('TWEETID', 'show', 'get'); return false;" id="details_link_for_TWEETID">Details</a>-->
+        <a onclick="twitterObject.restApiAction('NEWSID', 'create', 'POST', null, 'favorites'); return false;" style="display: FAVORITELINKDISPLAY;" id="newsfeed_favorite_link_for_NEWSID"><img src="img/favorite-off.png" /></a>
+        <a onclick="twitterObject.restApiAction('NEWSID', 'destroy', 'POST', null, 'favorites'); return false;" style="display: FAVORITEDLINKDISPLAY;" id="newsfeed_unfavorite_link_for_NEWSID"><img src="img/favorite-on.png" /></a>
+    </span>
+    <div class="clr"></div>
+</li>

@@ -1,0 +1,23 @@
+<li>
+    <span class="big_list_item_info" onclick="ScreenObject.showScreenById( 'notificationsViewer', 'TWEETID')">
+        <img class="social_media_icon" src="./img/twitter_icon_small.png" alt="" />
+        <img class="avatar_img" src="USERIMAGE" alt="" />
+        <span>USERNAME 
+            <span>USERSCREENNAME</span>
+        </span>
+        <br />
+        <span class="date">CREATEDAT</span>
+        <br />
+        <span id="text_of_tweet_TWEETID">MENTION</span>
+    </span>
+    <span class="big_list_item_links">
+        <a onclick="showTextareaForPosting('twitter_reply', 'TWEETID', 'USERSCREENNAME')" 
+            id="reply_link_for_TWEETID">Reply</a>
+        <a onclick="twitterObject.restApiAction('TWEETID', 'retweet', 'POST'); return false;" id="retweet_link_for_TWEETID">Retweet</a> 
+        <a onclick="twitterObject.restApiAction('TWEETID', 'show', 'get'); return false;" id="details_link_for_TWEETID">Details</a>
+        <a onclick="twitterObject.restApiAction('TWEETID', 'create', 'POST', null, 'favorites'); return false;" style="display: FAVORITELINKDISPLAY;" id="mentions_favorite_link_for_TWEETID">Favorite</a>
+        <a onclick="twitterObject.restApiAction('TWEETID', 'destroy', 'POST', null, 'favorites'); return false;" style="display: FAVORITEDLINKDISPLAY;" id="mentions_unfavorite_link_for_TWEETID">Favorited</a>
+        <a onclick="showTextareaForPosting('share_to_facebook', 'MENTION')">Share to facebook</a>
+    </span>
+    <div class="clr"></div>
+</li>

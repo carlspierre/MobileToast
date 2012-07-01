@@ -1,0 +1,16 @@
+<li id="big_list_item_info CLASSTYPE">
+    <span class="gen_user_info" onclick="ScreenObject.showScreenById('newsfeedViewer', 'NEWSID')">
+        <img class="avatar_image" src="USERIMAGE" alt=""/>
+        <span class="author">AUTHOR</span>
+        <div class="detail_fb_social_icon" alt="./img/blank_50x50.gif"></div>
+        <span class="date">CREATEDAT</span><br/>
+        <div class="newsfeed_text">TITLE</div>
+    </span>
+    <div class="clr"></div>
+    <span class="social_links">
+        <a style="display: LIKELINKDISPLAY;" onclick="facebookObject.graphApiAction('NEWSID', 'likes'); return false;" id="like_link_for_NEWSID"><img id="like_image_for_NEWSID" src="LIKEIMAGE"/>LIKECOUNT</a> 
+        <a style="display: COMMENTLINKDISPLAY;" onclick="showTextareaForPosting('facebook_comments', 'NEWSID'); return false;" id="comment_link_for_NEWSID"><img id="comment_image_for_NEWSID" src="img/comment-off.png"/>COMMENTCOUNT</a>
+        <a style="display: SHARELINKDISPLAY;"><img src="img/share-ff.png" /></a>
+    </span>
+    <div class="clr"></div>
+</li>

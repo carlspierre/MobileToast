@@ -696,13 +696,13 @@ function onDeviceReady() {
     
     
     // we'll need to check the internet connectivity .. NOTE BIG NOTE THIS DOESN"T WORK IN SIMULATOR ON WINDOWS PHONE
-    if( navigator.network.connection.type != "unknown" && navigator.network.connection.type != "none" ) {
+    //if( navigator.network.connection.type != "unknown" && navigator.network.connection.type != "none" ) {
         // and if we have connection - we show the dashboard .. 
         ScreenObject.showScreenById("login");
-    } else {
+    //} else {
         // otherwise we show the no internet connection screen .. 
-        ScreenObject.showScreenById("no_internet");
-    } 
+    //    ScreenObject.showScreenById("no_internet");
+    //	} 
     
     // and we'll define the sources for the photo - camera, albums lirary, etc .. 
     pictureSource = navigator.camera.PictureSourceType;
